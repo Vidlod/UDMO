@@ -2,11 +2,12 @@
   import type { SegmentKind } from './lib/segments/types';
   import type { JSONContent } from '@tiptap/core';
   import RichField from './lib/editor/RichField.svelte';
+  import MomentoForm from './lib/segments/MomentoForm.svelte';
   import { richToHtml } from './lib/html/richToHtml';
 
   /** Segmentos disponibles. El formulario de cada uno llega en fases F2–F3. */
   const segmentos: { kind: SegmentKind; label: string; estado: string }[] = [
-    { kind: 'momento', label: 'Momento Evaluativo', estado: 'F2' },
+    { kind: 'momento', label: 'Momento Evaluativo', estado: 'F2 — listo' },
     { kind: 'entregable', label: 'Entregable / Avance', estado: 'F3' },
     { kind: 'glosario', label: 'Glosario', estado: 'F3' },
     { kind: 'introduccion', label: 'Introducción al curso', estado: 'F3' },
@@ -72,11 +73,13 @@
           </div>
         </div>
       </div>
+    {:else if vista === 'momento'}
+      <MomentoForm />
     {:else}
       <div class="panel__placeholder">
         <h2>{segmentos.find((s) => s.kind === vista)?.label}</h2>
         <p>
-          El formulario de este segmento se implementa en las fases F2–F3.
+          El formulario de este segmento se implementa en la fase F3.
           Revisa <code>REQUISITOS.md</code> §6 para su modelo de datos.
         </p>
       </div>

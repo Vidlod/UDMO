@@ -21,6 +21,11 @@
       element,
       extensions: buildExtensions(mode, placeholder),
       content: value ?? undefined,
+      // Enlace SOLO de salida (editor → value). NO empujamos value de vuelta al
+      // editor: hacerlo en un $effect compite con las pulsaciones y reinicia el
+      // documento/selección a media escritura, lo que rompía las input rules
+      // (`- ` no creaba viñeta) y la edición en general. Para cargar un proyecto
+      // (F4) se re-montará el componente con una `key`, no con setContent en vivo.
       onUpdate: ({ editor }) => {
         value = editor.getJSON();
       },
@@ -28,16 +33,6 @@
   });
 
   onDestroy(() => editor?.destroy());
-
-  // Refleja cambios EXTERNOS del valor en el editor (p. ej. cargar un proyecto).
-  // El guard por comparación evita el bucle con onUpdate.
-  $effect(() => {
-    const v = value;
-    if (!editor) return;
-    if (JSON.stringify(editor.getJSON()) !== JSON.stringify(v)) {
-      editor.commands.setContent(v ?? '', false);
-    }
-  });
 </script>
 
 <div class="richfield" bind:this={element}></div>

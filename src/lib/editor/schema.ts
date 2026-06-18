@@ -47,6 +47,25 @@ const SingleLineGuard = Extension.create({
   },
 });
 
+/**
+ * ListItem con salida de lista robusta. El ListItem de TipTap solo asocia
+ * `Enter → splitListItem`, que devuelve `false` en una viñeta vacía y deja al
+ * usuario "atrapado" en la lista. Encadenamos: si splitListItem no aplica
+ * (viñeta vacía), `liftListItem` saca al usuario de la lista a un `<p>`.
+ */
+const GeoListItem = ListItem.extend({
+  addKeyboardShortcuts() {
+    return {
+      ...this.parent?.(),
+      Enter: () =>
+        this.editor.commands.first(({ commands }) => [
+          () => commands.splitListItem(this.name),
+          () => commands.liftListItem(this.name),
+        ]),
+    };
+  },
+});
+
 /** Construye el conjunto de extensiones para un campo según su modo. */
 export function buildExtensions(mode: FieldMode, placeholder = ''): Extensions {
   const common: Extensions = [
@@ -70,7 +89,7 @@ export function buildExtensions(mode: FieldMode, placeholder = ''): Extensions {
     Paragraph,
     BulletList,
     OrderedList,
-    ListItem,
+    GeoListItem,
     ExtraInputRules,
     ...common,
   ];

@@ -15,11 +15,12 @@
 
 import type { JSONContent } from '@tiptap/core';
 
-/** Contenido de un campo rico (cuerpo de semana, "Tenga en cuenta", etc.). */
-export type RichDoc = JSONContent;
+/** Contenido de un campo rico (cuerpo de semana, "Tenga en cuenta", etc.).
+ *  `null` = vacío (campo aún sin escribir). */
+export type RichDoc = JSONContent | null;
 
-/** Texto de una línea o párrafo único; puede llevar negrita (marcas inline). */
-export type InlineText = JSONContent;
+/** Texto de una línea o párrafo único; puede llevar negrita. `null` = vacío. */
+export type InlineText = JSONContent | null;
 
 /** Los cinco tipos de segmento que UDMO sabe maquetar. */
 export type SegmentKind =
