@@ -1,0 +1,59 @@
+/* Estilos del editor rico (TipTap/ProseMirror) dentro de UDMO. */
+
+.richfield {
+  background: #fff;
+  color: #212529;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.richfield .ProseMirror {
+  padding: 12px 14px;
+  min-height: 80px;
+  outline: none;
+}
+
+.richfield .ProseMirror:focus {
+  outline: none;
+}
+.richfield:focus-within {
+  border-color: var(--accent);
+}
+
+.richfield .ProseMirror p {
+  margin: 0 0 1em;
+}
+.richfield .ProseMirror p:last-child {
+  margin-bottom: 0;
+}
+
+.richfield .ProseMirror ul,
+.richfield .ProseMirror ol {
+  margin: 0 0 1em;
+  padding-left: 1.6em;
+}
+.richfield .ProseMirror ul ul,
+.richfield .ProseMirror ul ol,
+.richfield .ProseMirror ol ul,
+.richfield .ProseMirror ol ol {
+  margin-bottom: 0;
+}
+.richfield .ProseMirror li > p {
+  margin: 0;
+}
+
+.richfield .ProseMirror strong {
+  font-weight: 700;
+}
+
+/* Placeholder (extension-placeholder) */
+.richfield .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--text-dim);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
