@@ -24,6 +24,8 @@ import Bold from '@tiptap/extension-bold';
 import BulletList from '@tiptap/extension-bullet-list';
 import OrderedList from '@tiptap/extension-ordered-list';
 import ListItem from '@tiptap/extension-list-item';
+import HardBreak from '@tiptap/extension-hard-break';
+import Link from '@tiptap/extension-link';
 import History from '@tiptap/extension-history';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Gapcursor from '@tiptap/extension-gapcursor';
@@ -90,6 +92,8 @@ export function buildExtensions(mode: FieldMode, placeholder = ''): Extensions {
     BulletList,
     OrderedList,
     GeoListItem,
+    HardBreak,
+    Link.configure({ openOnClick: false, autolink: true, linkOnPaste: true }),
     ExtraInputRules,
     ...common,
   ];

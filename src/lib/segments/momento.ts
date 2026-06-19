@@ -90,24 +90,30 @@ function buildResumen(data: MomentoData): string {
 
 function buildDescripcion(data: MomentoData): string {
   const cuerpo = applySpacing(richToHtml(data.descripcionGeneral));
+  // §6 skill: h4 secundario lleva <br> al inicio para el espaciado Moodle.
+  // Solo se emite si el usuario llenó el campo.
+  const condHtml = richToHtml(data.condicionesEntrega);
+  const condiciones = condHtml
+    ? `\n                        <h4><br>Condiciones Particulares de Entrega</h4>\n                        ${applySpacing(condHtml)}`
+    : '';
   return `
                     <div class="tab-pane fade shadow rounded bg-white p-5"
                         id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                         <h4 class="mb-4">Descripción General</h4>
-                        ${cuerpo}
+                        ${cuerpo}${condiciones}
                     </div>`;
 }
 
 /* ── Pestaña 3: Instrumento de Evaluación (Rúbrica) ──────────────────── */
 
 function buildInstrumentoEval(data: MomentoData): string {
-  const rubrica = data.rubricaArchivo
-    ? `<strong><a href="@@PLUGINFILE@@/${esc(data.rubricaArchivo)}" target="_blank" rel="noopener">
+  // Use the specific filename if provided; fall back to a generic @@PLUGINFILE@@ path.
+  const archivo = data.rubricaArchivo || 'rubrica.pdf';
+  const rubrica = `<strong><a href="@@PLUGINFILE@@/${esc(archivo)}" target="_blank" rel="noopener">
                             <button type="button" class="btn btn-outline-primary btn-lg" aria-pressed="true" role="button">
                                 <i class="fa fa fa-file-pdf-o fa-lg"></i> Rúbrica
                             </button>
-                        </a></strong>`
-    : `<!-- FLAG: red-sin-archivo Falta el archivo de la rúbrica del momento -->`;
+                        </a></strong>`;
   return `
                     <div class="tab-pane fade shadow rounded bg-white p-5"
                         id="v-pills-profile1" role="tabpanel" aria-labelledby="v-pills-profile1-tab">
@@ -127,8 +133,10 @@ function buildInstrumentoEnviar(data: MomentoData): string {
       const { url, flag } = assignUrl(av, data.curso);
       return `${flag}
                         <div style="text-align: center;">
-                            <a class="btn btn-outline-primary btn-lg" target="_blank" href="${url}" rel="noopener" role="button">
-                                <span class="spinner-grow spinner-grow-sm"></span> ${texto}
+                            <a target="_blank" href="${url}" rel="noopener">
+                                <button type="button" class="btn btn-outline-primary btn-lg" aria-pressed="true" role="button">
+                                    <span class="spinner-grow spinner-grow-sm"></span> ${texto}
+                                </button>
                             </a>
                         </div>`;
     })
@@ -188,8 +196,10 @@ function buildContenido(data: MomentoData): string {
         const { url, flag } = assignUrl(av, data.curso);
         cuerpo += `${envio}${flag}
                                         <div style="text-align: center;">
-                                            <a class="btn btn-outline-primary btn-lg" href="${url}" target="_blank" rel="noopener" role="button">
-                                                <span class="spinner-grow spinner-grow-sm"></span> ${texto}
+                                            <a href="${url}">
+                                                <button type="button" class="btn btn-outline-primary btn-lg" aria-pressed="true" role="button">
+                                                    <span class="spinner-grow spinner-grow-sm"></span> ${texto}
+                                                </button>
                                             </a>
                                         </div>`;
       }

@@ -49,6 +49,114 @@
   font-weight: 700;
 }
 
+/* Wrapper que contiene el toolbar, bubble menu y el editor */
+.richfield-wrap {
+  position: relative;
+}
+
+/* Toolbar fijo encima del editor (solo modo rich) */
+.rf-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 4px 6px;
+  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+.rf-toolbar + .richfield {
+  border-radius: 0 0 8px 8px;
+}
+.rf-tool-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #475569;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 3px 8px;
+  transition: background 0.1s, border-color 0.1s;
+}
+.rf-tool-btn:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+/* Bubble menu flotante (aparece al seleccionar texto) */
+.bubble-menu {
+  position: absolute;
+  z-index: 200;
+  transform: translateX(-50%);
+  background: #1e293b;
+  border-radius: 7px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  /* Triangle arrow below */
+}
+.bubble-menu::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #1e293b;
+}
+.bubble-btn {
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1;
+  transition: background 0.1s, color 0.1s;
+  user-select: none;
+}
+.bubble-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+}
+.bubble-btn--active {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+.bubble-btn--confirm {
+  color: #86efac;
+}
+.bubble-btn--confirm:hover {
+  background: rgba(134, 239, 172, 0.15);
+}
+.bubble-sep {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 2px;
+}
+.bubble-link-input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  color: #e2e8f0;
+  font-size: 12px;
+  padding: 3px 7px;
+  width: 170px;
+  outline: none;
+}
+.bubble-link-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+.bubble-link-input:focus {
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
 /* Placeholder (extension-placeholder) */
 .richfield .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);

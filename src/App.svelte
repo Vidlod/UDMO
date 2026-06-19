@@ -5,16 +5,21 @@
   import MomentoForm from './lib/segments/MomentoForm.svelte';
   import { richToHtml } from './lib/html/richToHtml';
 
+  // 'momento2' es solo un alias de nav — no tiene SegmentData propio;
+  // ambos momentos generan MomentoData (kind: 'momento').
+  type NavKind = SegmentKind | 'momento2';
+  type Vista = NavKind | 'demo';
+
   /** Segmentos disponibles. El formulario de cada uno llega en fases F2–F3. */
-  const segmentos: { kind: SegmentKind; label: string; estado: string }[] = [
-    { kind: 'momento', label: 'Momento Evaluativo', estado: 'F2 — listo' },
-    { kind: 'entregable', label: 'Entregable / Avance', estado: 'F3' },
-    { kind: 'glosario', label: 'Glosario', estado: 'F3' },
+  const segmentos: { kind: NavKind; label: string; estado: string }[] = [
+    { kind: 'momento',    label: 'Momento Evaluativo I',  estado: 'F2 — listo' },
+    { kind: 'momento2',   label: 'Momento Evaluativo II', estado: 'F2 — listo' },
+    { kind: 'entregable', label: 'Entregable / Avance',   estado: 'F3' },
+    { kind: 'glosario',   label: 'Glosario',              estado: 'F3' },
     { kind: 'introduccion', label: 'Introducción al curso', estado: 'F3' },
-    { kind: 'linea-tiempo', label: 'Línea de tiempo', estado: 'F3' },
+    { kind: 'linea-tiempo', label: 'Línea de tiempo',      estado: 'F3' },
   ];
 
-  type Vista = SegmentKind | 'demo';
   let vista = $state<Vista>('demo');
 
   // Estado del editor de demostración (F1).
@@ -75,6 +80,12 @@
       </div>
     {:else if vista === 'momento'}
       <MomentoForm />
+    {:else if vista === 'momento2'}
+      <!--
+        Momento II: peso total 60%, avances a 20% c/u, "Último momento del curso"
+        activo por defecto → el último avance se rotula "Producto Final".
+      -->
+      <MomentoForm momentoNum="II" pesoTotal={60} pesoAvance={20} lastMomento={true} />
     {:else}
       <div class="panel__placeholder">
         <h2>{segmentos.find((s) => s.kind === vista)?.label}</h2>

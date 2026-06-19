@@ -107,6 +107,13 @@ export interface MomentoData {
   avances: Avance[];
   /** Pestaña "Descripción General" (fuente: tabla "Entregables del avance N…"). */
   descripcionGeneral: RichDoc;
+  /**
+   * Subsección "Condiciones Particulares de Entrega" dentro de la pestaña
+   * Descripción General. Se exporta como `<h4><br>Condiciones…</h4>` + contenido
+   * (regla §6: el `<br>` al inicio del h4 secundario es el espaciado Moodle).
+   * `null` = la subsección no se emite en el HTML.
+   */
+  condicionesEntrega: RichDoc;
   /** Nombre de archivo de la rúbrica para el botón "Instrumento de Evaluación". */
   rubricaArchivo: string | null;
   /** Semanas individuales (derivadas de los rangos de los avances). */

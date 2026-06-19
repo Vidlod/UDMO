@@ -29,24 +29,49 @@ function escapeText(s: string): string {
   return s.replace(/[&<>]/g, (c) => ESCAPE[c]);
 }
 
-/** Serializa nodos inline (texto + negrita) fusionando tramos de negrita. */
+/**
+ * Serializa nodos inline:
+ * - `text` plano o con marks bold / link (o ambos: → `<strong><a>`)
+ * - `hardBreak` → `<br>` (usado en citas bibliográficas §5 del skill)
+ *
+ * Fusiona tramos de negrita consecutivos para no emitir `<strong><strong>`.
+ * Los links rompen la fusión (cada link puede tener href distinto).
+ */
 function serializeInline(nodes: JSONContent[] | undefined): string {
   if (!nodes) return '';
   let out = '';
   let boldOpen = false;
+
+  const closeBold = () => {
+    if (boldOpen) { out += '</strong>'; boldOpen = false; }
+  };
+
   for (const n of nodes) {
-    if (n.type !== 'text') continue;
-    const isBold = (n.marks ?? []).some((m) => m.type === 'bold');
-    if (isBold && !boldOpen) {
-      out += '<strong>';
-      boldOpen = true;
-    } else if (!isBold && boldOpen) {
-      out += '</strong>';
-      boldOpen = false;
+    if (n.type === 'hardBreak') {
+      closeBold();
+      out += '<br>';
+      continue;
     }
-    out += escapeText(n.text ?? '');
+    if (n.type !== 'text') continue;
+
+    const marks = n.marks ?? [];
+    const isBold = marks.some((m) => m.type === 'bold');
+    const linkMark = marks.find((m) => m.type === 'link');
+
+    if (linkMark) {
+      // Links always close the running bold span and wrap themselves.
+      closeBold();
+      const href = escapeText(linkMark.attrs?.href ?? '');
+      const inner = escapeText(n.text ?? '');
+      const a = `<a href="${href}" target="_blank" rel="noopener">${inner}</a>`;
+      out += isBold ? `<strong>${a}</strong>` : a;
+    } else {
+      if (isBold && !boldOpen) { out += '<strong>'; boldOpen = true; }
+      else if (!isBold && boldOpen) { out += '</strong>'; boldOpen = false; }
+      out += escapeText(n.text ?? '');
+    }
   }
-  if (boldOpen) out += '</strong>';
+  closeBold();
   return out;
 }
 
